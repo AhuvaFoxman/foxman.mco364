@@ -18,6 +18,7 @@ public class PaintFrame extends JFrame {
 	private JButton pencil;
 	private JButton squareTool;
 	private JButton ovalTool;
+	private JButton lineTool;
 	private JButton bucket;
 	private JButton red;
 	private JButton orange;
@@ -47,7 +48,7 @@ public class PaintFrame extends JFrame {
 		JPanel buttonPanel = new JPanel();
 		JPanel colorPanel = new JPanel();
 
-		buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 3));
+		buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 1, 1));
 		colorPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 1, 1));
 
 		container.add(buttonPanel, BorderLayout.NORTH);
@@ -58,9 +59,13 @@ public class PaintFrame extends JFrame {
 		squareTool.setBackground(Color.WHITE);
 		ovalTool = new JButton(new ImageIcon("oval.jpg"));
 		ovalTool.setBackground(Color.WHITE);
+		lineTool = new JButton(new ImageIcon("line.png"));
+		lineTool.setBackground(Color.WHITE);
 		bucket = new JButton(new ImageIcon("bucket.png"));
 		bucket.setBackground(Color.WHITE);
+		
 		color = Color.BLACK; //default
+		
 		this.tool = new PencilTool(color); // default
 		
 		Dimension d = new Dimension(30,30);
@@ -105,7 +110,9 @@ public class PaintFrame extends JFrame {
 		buttonPanel.add(pencil);
 		buttonPanel.add(squareTool);
 		buttonPanel.add(ovalTool);
+		buttonPanel.add(lineTool);
 		buttonPanel.add(bucket);
+		
 
 		canvas = new Canvas();
 
@@ -138,11 +145,21 @@ public class PaintFrame extends JFrame {
 			}
 
 		});
+		
+		lineTool.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+				tool = new LineTool(color);
+				canvas.setTool(tool);
+
+			}
+
+		});
 		bucket.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
 				 tool = new BucketTool();
-				canvas.setTool(tool);
+				 canvas.setTool(tool);
 
 			}
 
@@ -152,7 +169,10 @@ public class PaintFrame extends JFrame {
 
 			public void actionPerformed(ActionEvent arg0) {
 				color = Color.RED;
+				
+				canvas.setTool(tool);
 				canvas.setColor(color);
+				
 
 			}
 
