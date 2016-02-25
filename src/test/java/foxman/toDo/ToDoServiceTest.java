@@ -14,24 +14,25 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ToDoServiceTest {
-	
+
 	@Test
-	public void testListToDos() throws IOException{
-		
+	public void testListToDos() throws IOException {
+
 		Retrofit retrofit = new Retrofit.Builder()
-		.baseUrl("http://jsonplaceholder.typicode.com").addConverterFactory(GsonConverterFactory.create()).build();
-		
+				.baseUrl("http://jsonplaceholder.typicode.com")
+				.addConverterFactory(GsonConverterFactory.create()).build();
+
 		ToDoService service = retrofit.create(ToDoService.class);
-		
+
 		Call<List<Todo>> call = service.listTodos();
-		Response<List<Todo>> response = call.execute();//returns a response of listTodo
-		//can do two things with a call object
-		//execute-doing something
-		//enqueue- adding to it
-		
+		Response<List<Todo>> response = call.execute();// returns a response of
+														// listTodo
+		// can do two things with a call object
+		// execute-doing something
+		// enqueue- adding to it
+
 		List<Todo> list = response.body();
 		Assert.assertEquals(200, list.size());
 	}
-	
 
 }
