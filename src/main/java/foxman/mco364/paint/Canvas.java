@@ -33,7 +33,7 @@ public class Canvas extends JPanel {
 
 			public void mousePressed(MouseEvent e) {
 				tool.mousePressed(buffer.getGraphics(), e.getX(),
-						e.getY());
+						e.getY(), buffer);
 				repaint();
 			}
 

@@ -2,6 +2,7 @@ package foxman.mco364.paint;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 
 public class LineTool implements Tool {
 
@@ -15,7 +16,7 @@ public class LineTool implements Tool {
 		this.color = c;
 	}
 
-	public void mousePressed(Graphics g, int x, int y) {
+	public void mousePressed(Graphics g, int x, int y, BufferedImage image) {
 		x1 = x;
 		y1 = y;
 		x2 = x;
@@ -38,9 +39,6 @@ public class LineTool implements Tool {
 
 	}
 
-	public void mouseClicked(Graphics g, int x, int y) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 }

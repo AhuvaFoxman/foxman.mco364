@@ -45,6 +45,7 @@ public class PaintFrame extends JFrame {
 		container.setLayout(new BorderLayout());
 		container.setBackground(Color.WHITE);
 
+		
 		JPanel buttonPanel = new JPanel();
 		JPanel colorPanel = new JPanel();
 
@@ -63,12 +64,12 @@ public class PaintFrame extends JFrame {
 		lineTool.setBackground(Color.WHITE);
 		bucket = new JButton(new ImageIcon("bucket.png"));
 		bucket.setBackground(Color.WHITE);
-		
-		color = Color.BLACK; //default
-		
+
+		color = Color.BLACK; // default
+
 		this.tool = new PencilTool(color); // default
-		
-		Dimension d = new Dimension(30,30);
+
+		Dimension d = new Dimension(30, 30);
 		red = new JButton();
 		red.setBackground(Color.RED);
 		red.setPreferredSize(d);
@@ -94,7 +95,7 @@ public class PaintFrame extends JFrame {
 		black.setBackground(Color.BLACK);
 		black.setPreferredSize(d);
 		clear = new JButton("Clear Canvas!");
-		
+
 		container.add(clear, BorderLayout.SOUTH);
 
 		colorPanel.add(red);
@@ -112,7 +113,6 @@ public class PaintFrame extends JFrame {
 		buttonPanel.add(ovalTool);
 		buttonPanel.add(lineTool);
 		buttonPanel.add(bucket);
-		
 
 		canvas = new Canvas();
 
@@ -145,7 +145,7 @@ public class PaintFrame extends JFrame {
 			}
 
 		});
-		
+
 		lineTool.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
@@ -155,29 +155,27 @@ public class PaintFrame extends JFrame {
 			}
 
 		});
+		
 		bucket.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
-				 tool = new BucketTool();
-				 canvas.setTool(tool);
+				tool = new BucketTool(color);
+				canvas.setTool(tool);
 
 			}
 
 		});
-		
+
 		red.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
 				color = Color.RED;
-				
-				canvas.setTool(tool);
 				canvas.setColor(color);
-				
 
 			}
 
 		});
-		
+
 		orange.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
@@ -187,7 +185,7 @@ public class PaintFrame extends JFrame {
 			}
 
 		});
-		
+
 		yellow.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
@@ -197,7 +195,7 @@ public class PaintFrame extends JFrame {
 			}
 
 		});
-		
+
 		green.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
@@ -207,7 +205,7 @@ public class PaintFrame extends JFrame {
 			}
 
 		});
-		
+
 		blue.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
@@ -217,7 +215,7 @@ public class PaintFrame extends JFrame {
 			}
 
 		});
-		
+
 		purple.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
@@ -227,7 +225,7 @@ public class PaintFrame extends JFrame {
 			}
 
 		});
-		
+
 		pink.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
@@ -237,7 +235,7 @@ public class PaintFrame extends JFrame {
 			}
 
 		});
-		
+
 		black.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
@@ -247,18 +245,15 @@ public class PaintFrame extends JFrame {
 			}
 
 		});
-		
+
 		clear.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
 				dispose();
 				new PaintFrame().setVisible(true);
-
 			}
 
 		});
-		
-		
 
 		setVisible(true);
 	}

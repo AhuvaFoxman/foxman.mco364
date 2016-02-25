@@ -2,6 +2,7 @@ package foxman.mco364.paint;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 
 public class PencilTool implements Tool {
 
@@ -15,7 +16,7 @@ public class PencilTool implements Tool {
 	}
 	
 
-	public void mousePressed(Graphics g, int x, int y) {
+	public void mousePressed(Graphics g, int x, int y,  BufferedImage image) {
 		this.x = x;
 		this.y = y;
 		g.setColor(color);
@@ -42,9 +43,5 @@ public class PencilTool implements Tool {
 	}
 
 
-	public void mouseClicked(Graphics g, int x, int y) {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

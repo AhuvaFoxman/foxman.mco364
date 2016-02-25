@@ -1,11 +1,11 @@
 package foxman.mco364.paint;
 
-import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 
 public interface Tool {
 
-	void mousePressed(Graphics g, int x, int y);
+	void mousePressed(Graphics g, int x, int y, BufferedImage image);
 
 	void mouseReleased(Graphics g, int x, int y);
 
@@ -13,5 +13,4 @@ public interface Tool {
 
 	void drawPreview(Graphics g);
 
-	void mouseClicked(Graphics g, int x, int y);
 }
