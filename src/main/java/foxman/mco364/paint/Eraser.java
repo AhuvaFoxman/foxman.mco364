@@ -1,24 +1,22 @@
 package foxman.mco364.paint;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-public class PencilTool implements Tool {
-
+public class Eraser implements Tool{
+	
 	private int x;
 	private int y;
-	private Color color;
 
-	public PencilTool(Color c) {
-
-		this.color = c;
-	}
+	
 
 	public void mousePressed(Graphics g, int x, int y, BufferedImage image) {
 		this.x = x;
 		this.y = y;
-		g.setColor(color);
+		g.setColor(Color.WHITE);
 		g.fillOval(x, y, 1, 1);
 
 	}
@@ -29,8 +27,11 @@ public class PencilTool implements Tool {
 	}
 
 	public void mouseDragged(Graphics g, int x, int y) {
-		g.setColor(color);
-		g.drawLine(this.x, this.y, x, y);
+		
+		Graphics2D g2 = (Graphics2D) g;
+		g2.setStroke(new BasicStroke(8));
+		g2.setColor(Color.WHITE);
+		g2.drawLine(this.x, this.y, x, y);
 
 		this.x = x;
 		this.y = y;
@@ -40,5 +41,6 @@ public class PencilTool implements Tool {
 		// TODO Auto-generated method stub
 
 	}
+
 
 }

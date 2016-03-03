@@ -10,8 +10,13 @@ import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.colorchooser.AbstractColorChooserPanel;
+import javax.swing.colorchooser.ColorSelectionModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class PaintFrame extends JFrame {
 
@@ -20,15 +25,11 @@ public class PaintFrame extends JFrame {
 	private JButton ovalTool;
 	private JButton lineTool;
 	private JButton bucket;
-	private JButton red;
-	private JButton orange;
-	private JButton yellow;
-	private JButton green;
-	private JButton blue;
-	private JButton purple;
-	private JButton pink;
-	private JButton black;
 	private JButton clear;
+	private JButton undo;
+	private JButton redo;
+	private JColorChooser chooser;
+	private JButton eraser;
 
 	private Tool tool;
 	private Canvas canvas;
@@ -43,69 +44,88 @@ public class PaintFrame extends JFrame {
 
 		Container container = getContentPane();
 		container.setLayout(new BorderLayout());
-		container.setBackground(Color.WHITE);
 
-		
 		JPanel buttonPanel = new JPanel();
 		JPanel colorPanel = new JPanel();
 
 		buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 1, 1));
+		buttonPanel.setBackground(Color.WHITE);
 		colorPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 1, 1));
+		colorPanel.setBackground(Color.WHITE);
 
 		container.add(buttonPanel, BorderLayout.NORTH);
 
+		Dimension d = new Dimension(40, 40);
+
 		pencil = new JButton(new ImageIcon("pencil.jpg"));
 		pencil.setBackground(Color.WHITE);
+		pencil.setPreferredSize(d);
 		squareTool = new JButton(new ImageIcon("square.png"));
 		squareTool.setBackground(Color.WHITE);
+		squareTool.setPreferredSize(d);
+
 		ovalTool = new JButton(new ImageIcon("oval.jpg"));
 		ovalTool.setBackground(Color.WHITE);
+		ovalTool.setPreferredSize(d);
+
 		lineTool = new JButton(new ImageIcon("line.png"));
 		lineTool.setBackground(Color.WHITE);
+		lineTool.setPreferredSize(d);
+
 		bucket = new JButton(new ImageIcon("bucket.png"));
 		bucket.setBackground(Color.WHITE);
+		bucket.setPreferredSize(d);
 
-		color = Color.BLACK; // default
+		undo = new JButton(new ImageIcon("undo.png"));
+		undo.setPreferredSize(d);
+
+		redo = new JButton(new ImageIcon("redo.jpg"));
+		redo.setPreferredSize(d);
+
+		undo.setBackground(Color.WHITE);
+		redo.setBackground(Color.WHITE);
+		;
+
+		eraser = new JButton(new ImageIcon("eraser.jpg"));
+		eraser.setBackground(Color.WHITE);
+		eraser.setPreferredSize(d);
+
+
+		chooser = new JColorChooser(Color.BLACK);
+		AbstractColorChooserPanel[] panels = chooser.getChooserPanels();
+
+		chooser.setPreviewPanel(new JPanel());
+		for (AbstractColorChooserPanel accp : panels) {
+			if (!accp.getDisplayName().equals("Swatches")) {
+				chooser.removeChooserPanel(accp);
+			}
+		}
+
+		ColorSelectionModel model = chooser.getSelectionModel();
+		ChangeListener changeListener = new ChangeListener() {
+
+			public void stateChanged(ChangeEvent changeEvent) {
+				// TODO Auto-generated method stub
+				color = chooser.getColor();
+
+			}
+		};
+
+		model.addChangeListener(changeListener);
+
+		colorPanel.add(chooser);
+
+		colorPanel.add(undo);
+		colorPanel.add(redo);
+		colorPanel.add(eraser);
+
+		color = chooser.getSelectionModel().getSelectedColor();
 
 		this.tool = new PencilTool(color); // default
 
-		Dimension d = new Dimension(30, 30);
-		red = new JButton();
-		red.setBackground(Color.RED);
-		red.setPreferredSize(d);
-		orange = new JButton();
-		orange.setBackground(Color.ORANGE);
-		orange.setPreferredSize(d);
-		yellow = new JButton();
-		yellow.setBackground(Color.YELLOW);
-		yellow.setPreferredSize(d);
-		green = new JButton();
-		green.setBackground(Color.GREEN);
-		green.setPreferredSize(d);
-		blue = new JButton();
-		blue.setBackground(Color.BLUE);
-		blue.setPreferredSize(d);
-		purple = new JButton();
-		purple.setBackground(Color.MAGENTA);
-		purple.setPreferredSize(d);
-		pink = new JButton();
-		pink.setBackground(Color.PINK);
-		pink.setPreferredSize(d);
-		black = new JButton();
-		black.setBackground(Color.BLACK);
-		black.setPreferredSize(d);
 		clear = new JButton("Clear Canvas!");
 
 		container.add(clear, BorderLayout.SOUTH);
-
-		colorPanel.add(red);
-		colorPanel.add(orange);
-		colorPanel.add(yellow);
-		colorPanel.add(green);
-		colorPanel.add(blue);
-		colorPanel.add(purple);
-		colorPanel.add(pink);
-		colorPanel.add(black);
 
 		buttonPanel.add(colorPanel);
 		buttonPanel.add(pencil);
@@ -115,6 +135,7 @@ public class PaintFrame extends JFrame {
 		buttonPanel.add(bucket);
 
 		canvas = new Canvas();
+		canvas.setBackground(Color.WHITE);
 
 		add(canvas, BorderLayout.CENTER);
 
@@ -155,92 +176,12 @@ public class PaintFrame extends JFrame {
 			}
 
 		});
-		
+
 		bucket.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
 				tool = new BucketTool(color);
 				canvas.setTool(tool);
-
-			}
-
-		});
-
-		red.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent arg0) {
-				color = Color.RED;
-				canvas.setColor(color);
-
-			}
-
-		});
-
-		orange.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent arg0) {
-				color = Color.ORANGE;
-				canvas.setColor(color);
-
-			}
-
-		});
-
-		yellow.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent arg0) {
-				color = Color.YELLOW;
-				canvas.setColor(color);
-
-			}
-
-		});
-
-		green.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent arg0) {
-				color = Color.GREEN;
-				canvas.setColor(color);
-
-			}
-
-		});
-
-		blue.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent arg0) {
-				color = Color.BLUE;
-				canvas.setColor(color);
-
-			}
-
-		});
-
-		purple.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent arg0) {
-				color = Color.MAGENTA;
-				canvas.setColor(color);
-
-			}
-
-		});
-
-		pink.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent arg0) {
-				color = Color.PINK;
-				canvas.setColor(color);
-
-			}
-
-		});
-
-		black.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent arg0) {
-				color = Color.BLACK;
-				canvas.setColor(color);
 
 			}
 
@@ -254,7 +195,30 @@ public class PaintFrame extends JFrame {
 			}
 
 		});
+		undo.addActionListener(new ActionListener() {
 
+			public void actionPerformed(ActionEvent arg0) {
+				canvas.undo();
+			}
+
+		});
+
+		redo.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+				canvas.redo();
+			}
+
+		});
+
+		eraser.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+				tool = new Eraser();
+				canvas.setTool(tool);
+			}
+
+		});
 		setVisible(true);
 	}
 
