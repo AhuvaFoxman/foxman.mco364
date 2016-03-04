@@ -4,20 +4,18 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-public class OvalTool implements Tool {
+public class OvalTool extends Tool {
 
 	private int x1, y1;
 	private int x2, y2;
 	private int width, height;
 
-	private Color color;
 
-	public OvalTool(Color c) {
-
-		this.color = c;
+	public OvalTool(PaintProperties properties) {
+		super(properties);
 	}
 
-	public void mousePressed(Graphics g, int x, int y, BufferedImage image) {
+	public void mousePressed(Graphics g, int x, int y) {
 		x1 = x;
 		y1 = y;
 		x2 = x;
@@ -31,7 +29,7 @@ public class OvalTool implements Tool {
 		y2 = y;
 		width = Math.abs(x2 - x1);
 		height = Math.abs(y2 - y1);
-		g.setColor(color);
+		g.setColor(properties.getColor());
 		g.drawOval(x1, y1, width, height);
 
 	}
@@ -44,7 +42,7 @@ public class OvalTool implements Tool {
 	}
 
 	public void drawPreview(Graphics g) {
-		g.setColor(color);
+		g.setColor(properties.getColor());
 		g.drawOval(x1, y1, width, height);
 	}
 

@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -20,20 +21,16 @@ import javax.swing.event.ChangeListener;
 
 public class PaintFrame extends JFrame {
 
-	private JButton pencil;
-	private JButton squareTool;
-	private JButton ovalTool;
-	private JButton lineTool;
-	private JButton bucket;
 	private JButton clear;
 	private JButton undo;
 	private JButton redo;
 	private JColorChooser chooser;
-	private JButton eraser;
+	private PaintProperties properties;
+	private BufferedImage buffer;
+	private Color color;
 
 	private Tool tool;
 	private Canvas canvas;
-	private Color color;
 
 	public PaintFrame() {
 		setTitle("PaintFrame");
@@ -48,48 +45,42 @@ public class PaintFrame extends JFrame {
 		JPanel buttonPanel = new JPanel();
 		JPanel colorPanel = new JPanel();
 
+		this.buffer = new BufferedImage(800, 800, BufferedImage.TYPE_INT_ARGB);
+
+		properties = new PaintProperties(800, 800, buffer);
+		
+		color = properties.getColor();
+		canvas = new Canvas(buffer);
+		canvas.setBackground(Color.WHITE);
+
 		buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 1, 1));
 		buttonPanel.setBackground(Color.WHITE);
+		
 		colorPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 1, 1));
 		colorPanel.setBackground(Color.WHITE);
 
 		container.add(buttonPanel, BorderLayout.NORTH);
 
-		Dimension d = new Dimension(40, 40);
+		ToolButton buttons[] = new ToolButton[] {
+				new ToolButton(new PencilTool(properties), "/pencil.jpg"),
+				new ToolButton(new SquareTool(properties), "/square.png"),
+				new ToolButton(new OvalTool(properties), "/oval.jpg"),
+				new ToolButton(new LineTool(properties), "/line.png"),
+				new ToolButton(new BucketTool(properties), "/bucket.png"),
+				new ToolButton(new Eraser(properties), "/eraser.jpg")};
 
-		pencil = new JButton(new ImageIcon("pencil.jpg"));
-		pencil.setBackground(Color.WHITE);
-		pencil.setPreferredSize(d);
-		squareTool = new JButton(new ImageIcon("square.png"));
-		squareTool.setBackground(Color.WHITE);
-		squareTool.setPreferredSize(d);
-
-		ovalTool = new JButton(new ImageIcon("oval.jpg"));
-		ovalTool.setBackground(Color.WHITE);
-		ovalTool.setPreferredSize(d);
-
-		lineTool = new JButton(new ImageIcon("line.png"));
-		lineTool.setBackground(Color.WHITE);
-		lineTool.setPreferredSize(d);
-
-		bucket = new JButton(new ImageIcon("bucket.png"));
-		bucket.setBackground(Color.WHITE);
-		bucket.setPreferredSize(d);
-
-		undo = new JButton(new ImageIcon("undo.png"));
+		Dimension d = new Dimension(40,40);
+		undo = new JButton(new ImageIcon(getClass().getResource("/undo.png")));
 		undo.setPreferredSize(d);
 
-		redo = new JButton(new ImageIcon("redo.jpg"));
+		redo = new JButton(new ImageIcon(getClass().getResource("/redo.jpg")));
 		redo.setPreferredSize(d);
 
 		undo.setBackground(Color.WHITE);
 		redo.setBackground(Color.WHITE);
-		;
 
-		eraser = new JButton(new ImageIcon("eraser.jpg"));
-		eraser.setBackground(Color.WHITE);
-		eraser.setPreferredSize(d);
-
+		
+		
 
 		chooser = new JColorChooser(Color.BLACK);
 		AbstractColorChooserPanel[] panels = chooser.getChooserPanels();
@@ -106,95 +97,47 @@ public class PaintFrame extends JFrame {
 
 			public void stateChanged(ChangeEvent changeEvent) {
 				// TODO Auto-generated method stub
-				color = chooser.getColor();
+				Color color = chooser.getColor();
+				properties.setColor(color);
 
 			}
 		};
 
 		model.addChangeListener(changeListener);
+		
+		buttonPanel.add(colorPanel);
 
 		colorPanel.add(chooser);
 
 		colorPanel.add(undo);
 		colorPanel.add(redo);
-		colorPanel.add(eraser);
 
 		color = chooser.getSelectionModel().getSelectedColor();
 
-		this.tool = new PencilTool(color); // default
+		this.tool = new PencilTool(properties); // default
 
 		clear = new JButton("Clear Canvas!");
 
 		container.add(clear, BorderLayout.SOUTH);
 
-		buttonPanel.add(colorPanel);
-		buttonPanel.add(pencil);
-		buttonPanel.add(squareTool);
-		buttonPanel.add(ovalTool);
-		buttonPanel.add(lineTool);
-		buttonPanel.add(bucket);
-
-		canvas = new Canvas();
-		canvas.setBackground(Color.WHITE);
-
 		add(canvas, BorderLayout.CENTER);
 
-		pencil.addActionListener(new ActionListener() {
+		ActionListener listener = new ActionListener() {
 
-			public void actionPerformed(ActionEvent arg0) {
-				tool = new PencilTool(color);
-				canvas.setTool(tool);
-			}
-
-		});
-
-		squareTool.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent arg0) {
-				tool = new SquareTool(color);
+			public void actionPerformed(ActionEvent e) {
+				ToolButton button = (ToolButton) e.getSource();
+				tool = button.getTool();
 				canvas.setTool(tool);
 
 			}
 
-		});
-		ovalTool.addActionListener(new ActionListener() {
+		};
 
-			public void actionPerformed(ActionEvent arg0) {
-				tool = new OvalTool(color);
-				canvas.setTool(tool);
+		for (ToolButton button : buttons) {
+			buttonPanel.add(button);
+			button.addActionListener(listener);
+		}
 
-			}
-
-		});
-
-		lineTool.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent arg0) {
-				tool = new LineTool(color);
-				canvas.setTool(tool);
-
-			}
-
-		});
-
-		bucket.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent arg0) {
-				tool = new BucketTool(color);
-				canvas.setTool(tool);
-
-			}
-
-		});
-
-		clear.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent arg0) {
-				dispose();
-				new PaintFrame().setVisible(true);
-			}
-
-		});
 		undo.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
@@ -210,15 +153,19 @@ public class PaintFrame extends JFrame {
 			}
 
 		});
-
-		eraser.addActionListener(new ActionListener() {
+		
+		clear.addActionListener(new ActionListener(){
 
 			public void actionPerformed(ActionEvent arg0) {
-				tool = new Eraser();
-				canvas.setTool(tool);
+				
+				dispose();
+				new PaintFrame().setVisible(true);
 			}
-
+			
+			
+			
 		});
+
 		setVisible(true);
 	}
 

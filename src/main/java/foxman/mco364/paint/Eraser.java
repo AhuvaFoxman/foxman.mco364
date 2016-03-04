@@ -6,14 +6,16 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-public class Eraser implements Tool{
+public class Eraser extends Tool{
 	
 	private int x;
 	private int y;
 
-	
+	public Eraser(PaintProperties properties) {
+		super(properties);
+	}
 
-	public void mousePressed(Graphics g, int x, int y, BufferedImage image) {
+	public void mousePressed(Graphics g, int x, int y) {
 		this.x = x;
 		this.y = y;
 		g.setColor(Color.WHITE);

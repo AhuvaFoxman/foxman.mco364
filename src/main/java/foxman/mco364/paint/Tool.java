@@ -3,14 +3,20 @@ package foxman.mco364.paint;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-public interface Tool {
+public abstract class Tool {
+	
+	protected PaintProperties properties;
+	
+	public Tool(PaintProperties properties){
+		this.properties = properties;
+	}
 
-	void mousePressed(Graphics g, int x, int y, BufferedImage image);
+	abstract void mousePressed(Graphics g, int x, int y);
 
-	void mouseReleased(Graphics g, int x, int y);
+	abstract void mouseReleased(Graphics g, int x, int y);
 
-	void mouseDragged(Graphics g, int x, int y);
+	abstract void mouseDragged(Graphics g, int x, int y);
 
-	void drawPreview(Graphics g);
+	abstract void drawPreview(Graphics g);
 
 }

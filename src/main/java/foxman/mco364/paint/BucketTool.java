@@ -6,12 +6,11 @@ import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class BucketTool implements Tool {
+public class BucketTool extends Tool {
 
-	private Color c;
 
-	public BucketTool(Color c) {
-		this.c = c;
+	public BucketTool(PaintProperties properties) {
+		super(properties);
 	}
 
 	public void mouseReleased(Graphics g, int x, int y) {
@@ -29,14 +28,14 @@ public class BucketTool implements Tool {
 
 	}
 
-	public void mousePressed(Graphics g, int x, int y, BufferedImage image) {
+	public void mousePressed(Graphics g, int x, int y) {
 		// TODO Auto-generated method stub
 
-		fill(x, y, image.getRGB(x, y), c.getRGB(), image);
+		fill(x, y, properties.getImage().getRGB(x, y), properties.getColor().getRGB());
 
 	}
 
-	private void fill(int x, int y, int oldCol, int newCol, BufferedImage image) {
+	private void fill(int x, int y, int oldCol, int newCol) {
 		Queue<Point> queue = new LinkedList<Point>();
 
 		queue.add(new Point(x, y));
@@ -49,10 +48,10 @@ public class BucketTool implements Tool {
 			int x2 = p.getX();
 			int y2 = p.getY();
 
-			if (x2 > 0 && y2 > 0 && x2 < image.getWidth()
-					&& y2 < image.getHeight() && image.getRGB(x2, y2) == oldCol) {
+			if (x2 > 0 && y2 > 0 && x2 < properties.getImage().getWidth()
+					&& y2 < properties.getImage().getHeight() && properties.getImage().getRGB(x2, y2) == oldCol) {
 
-				image.setRGB(x2, y2, newCol);
+				properties.getImage().setRGB(x2, y2, newCol);
 
 				queue.add(new Point(x2 - 1, y2));
 				queue.add(new Point(x2 + 1, y2));
